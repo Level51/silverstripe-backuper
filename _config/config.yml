@@ -1,0 +1,6 @@
+---
+Name: backuper
+After:
+  - 'framework/*'
+  - 'cms/*'
+---
