@@ -1,5 +1,5 @@
 # Backuper - A SilverStripe backup module
-**Backuper** is s slick backup module for SilverStripe. It just gets a database dump and packs it with all Files in the assets/ directory as .zip archive. Great for migration of pages through easy-to-use import/export functionality in the *Settings* section of the CMS.
+**Backuper** is a slick backup module for SilverStripe. It just gets a database dump and packs it with all files in the assets/ directory as .zip archive. Great for migration of pages through easy-to-use import/export functionality in the *Settings* section of the CMS.
 
 ---
 # Features
