@@ -1,0 +1,7 @@
+---
+Name: backuperroutes
+After: framework/routes#coreroutes
+---
+Director:
+  rules:
+    'backuper': 'BackupActionController'
