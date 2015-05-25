@@ -22,11 +22,11 @@ class BackupActionController extends Controller {
         $binPath = SiteConfig::current_site_config()->MySQLDumpExe;
 
         // Execute mysqldump and save output to tmp dir
-        exec($binPath . ' -u ' . SS_DATABASE_USERNAME . ' -p' . SS_DATABASE_PASSWORD . ' ' . $GLOBALS['database'] . ' > ' . sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'dump.sql');
+        exec($binPath . ' -u ' . SS_DATABASE_USERNAME . ' -p' . SS_DATABASE_PASSWORD . ' ' . $GLOBALS['database'] . ' > ' . sys_get_temp_dir() . DIRECTORY_SEPARATOR . $GLOBALS['database'] . '-dump.sql');
 
         // Archive assets together with dump
         $arch = new FlxZipArchive();
-        $tmpName = sys_get_temp_dir() . DIRECTORY_SEPARATOR . $GLOBALS['database'] . '-dump.zip';
+        $tmpName = sys_get_temp_dir() . DIRECTORY_SEPARATOR . $GLOBALS['database'] . '-backup.zip';
         $arch->open($tmpName, ZIPARCHIVE::CREATE);
         $arch->addFile(sys_get_temp_dir() . DIRECTORY_SEPARATOR . $GLOBALS['database'] . '-dump.sql', $GLOBALS['database'] . '-dump.sql');
         $arch->addDir(ASSETS_PATH, 'assets');
@@ -34,7 +34,7 @@ class BackupActionController extends Controller {
 
         // Return archive as download
         header("Content-type: application/zip");
-        header("Content-Disposition: attachment; filename=\"" . $tmpName . "\"");
+        header("Content-Disposition: attachment; filename=\"" . $GLOBALS['database'] . '-backup.zip' . "\"");
         header("Content-Length: " . filesize($tmpName));
         return readfile($tmpName);
     }

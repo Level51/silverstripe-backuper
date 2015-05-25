@@ -16,7 +16,7 @@ class BackupSettings extends Extension {
         $fields->addFieldToTab('Root.Main', TextField::create('MySQLDumpExe', _t('BackupSettings.MYSQL_DUMP_EXE', 'Absolute path to mysqldump executable')));
         $fields->addFieldToTab('Root.Main', TextField::create('MySQLExe', _t('BackupSettings.MYSQL_EXE', 'Absolute path to mysql executable')));
         if($this->owner->MySQLExe)
-            $fields->addFieldToTab('Root.Main', UploadField::create());
+            $fields->addFieldToTab('Root.Main', BackupUploadField::create('Backup', _t('BackupSettings.LOAD_BACKUP', 'Load backup')));
     }
 
     public function updateCMSActions(FieldList $actions) {
