@@ -7,6 +7,13 @@
 * Archiving and loading assets 
 
 ---
+# Setup
+1. Be sure that the module is in a folder **backuper/** on the root of the project.
+2. <code>sake dev/build "flush=all"</code>, depending on your config you might have to do this via URI in the browser.
+3. Determine the full path of the binaries **mysqldump(.exe)** and **mysql(.exe)** and specify the full path in the settings/site config section.
+4. If the binary paths are there you will see an action for backup creation and an upload field for loading backups.
+
+---
 # Maintainers
 - Julian Scheuchenzuber <js@lvl51.de>
 
