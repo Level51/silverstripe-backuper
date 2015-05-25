@@ -7,12 +7,16 @@
 
 class BackupSettings extends Extension {
     private static $db = array(
+        'MySQLExe' => 'Varchar(255)',
         'MySQLDumpExe' => 'Varchar(255)'
     );
 
     public function updateCMSFields(FieldList $fields) {
-        $fields->addFieldToTab('Root.Main', TextField::create('MySQLDumpExe', _t('BackupSettings.MYSQL_DUMP_EXE', 'Absolute path to mysqldump executable')));
         Requirements::javascript('backuper/javascript/settings.js');
+        $fields->addFieldToTab('Root.Main', TextField::create('MySQLDumpExe', _t('BackupSettings.MYSQL_DUMP_EXE', 'Absolute path to mysqldump executable')));
+        $fields->addFieldToTab('Root.Main', TextField::create('MySQLExe', _t('BackupSettings.MYSQL_EXE', 'Absolute path to mysql executable')));
+        if($this->owner->MySQLExe)
+            $fields->addFieldToTab('Root.Main', UploadField::create());
     }
 
     public function updateCMSActions(FieldList $actions) {

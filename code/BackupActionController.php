@@ -26,9 +26,9 @@ class BackupActionController extends Controller {
 
         // Archive assets together with dump
         $arch = new FlxZipArchive();
-        $tmpName = sys_get_temp_dir() . DIRECTORY_SEPARATOR . uniqid() . '-dump.zip';
+        $tmpName = sys_get_temp_dir() . DIRECTORY_SEPARATOR . $GLOBALS['database'] . '-dump.zip';
         $arch->open($tmpName, ZIPARCHIVE::CREATE);
-        $arch->addFile(sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'dump.sql', 'database-dump.sql');
+        $arch->addFile(sys_get_temp_dir() . DIRECTORY_SEPARATOR . $GLOBALS['database'] . '-dump.sql', $GLOBALS['database'] . '-dump.sql');
         $arch->addDir(ASSETS_PATH, 'assets');
         $arch->close();
 
