@@ -1,0 +1,8 @@
+{
+  "name": "ss-modules/backuper",
+  "description": "A slick backup/export tool for SilverStripe projects",
+  "version": "0.1.0",
+  "require": {
+    "php": ">=5.3.2"
+  }
+}
