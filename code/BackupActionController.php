@@ -4,6 +4,7 @@
  * User: Dipl.-Ing. (FH) Julian Scheuchenzuber M.Eng. <js@querdenker-design.com>
  * Date: 24.05.2015 01:43
  */
+use Ifsnop\Mysqldump as IMysqldump;
 
 class BackupActionController extends Controller {
     private static $allowed_actions = array('createBackup');
@@ -18,11 +19,14 @@ class BackupActionController extends Controller {
      * @param $form
      */
     public function createBackup(SS_HTTPRequest $request) {
-        // Fetch binary of mysqldump tool
-        $binPath = SiteConfig::current_site_config()->MySQLDumpExe;
+        // Get DB name
+        $db = defined('SS_DATABASE_PREFIX') ? SS_DATABASE_PREFIX : '';
+        $db .= $GLOBALS['database'];
+        $db .= defined('SS_DATABASE_SUFFIX') ? SS_DATABASE_SUFFIX : '';
 
-        // Execute mysqldump and save output to tmp dir
-        exec($binPath . ' -u ' . SS_DATABASE_USERNAME . ' -p' . SS_DATABASE_PASSWORD . ' ' . $GLOBALS['database'] . ' > ' . sys_get_temp_dir() . DIRECTORY_SEPARATOR . $GLOBALS['database'] . '-dump.sql');
+        // Generate a database dump
+        $dump = new IMysqldump\Mysqldump($db, SS_DATABASE_USERNAME, SS_DATABASE_PASSWORD);
+        $dump->start(sys_get_temp_dir() . DIRECTORY_SEPARATOR . $GLOBALS['database'] . '-dump.sql');
 
         // Archive assets together with dump
         $arch = new FlxZipArchive();

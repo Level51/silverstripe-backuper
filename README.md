@@ -7,6 +7,10 @@
 * Archiving and loading assets 
 
 ---
+# Dependencies
+* ifsnop MysqlDump: https://github.com/ifsnop/mysqldump-php
+
+---
 # Setup
 1. Be sure that the module is in a folder **backuper/** on the root of the project.
 2. <code>sake dev/build "flush=all"</code>, depending on your config you might have to do this via URI in the browser.
