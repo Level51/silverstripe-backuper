@@ -3,5 +3,3 @@
 .settings
 .idea
 .DS_Store
-/vendor/
-!/vendor/FlxZipArchive.php

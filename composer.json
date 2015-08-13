@@ -1,8 +1,14 @@
 {
-  "name": "ss-modules/backuper",
-  "description": "A slick backup/export tool for SilverStripe projects",
-  "version": "0.1.1",
+  "name": "level51/silverstripe-backuper",
+  "version": "0.1.0",
+  "description": "A slick backup/export tool for SilverStripe projects.",
   "type": "silverstripe-module",
+  "authors": [
+    {
+      "name": "Julian Scheuchenzuber",
+      "email": "js@lvl51.de"
+    }
+  ],
   "require": {
     "ifsnop/mysqldump-php": "1.*"
   }

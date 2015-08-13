@@ -1,7 +1,7 @@
 <?php
 /**
  * Created by PhpStorm.
- * User: Dipl.-Ing. (FH) Julian Scheuchenzuber M.Eng. <js@querdenker-design.com>
+ * User: Julian Scheuchenzuber <js@lvl51.de>
  * Date: 24.05.2015 01:43
  */
 use Ifsnop\Mysqldump as IMysqldump;
@@ -21,29 +21,29 @@ class BackupActionController extends Controller {
     public function createBackup(SS_HTTPRequest $request) {
         // Get DB name
         $db = defined('SS_DATABASE_PREFIX') ? SS_DATABASE_PREFIX : '';
-        $db .= $GLOBALS['database'];
+        if(isset($GLOBALS['database']))
+            $db .= $GLOBALS['database'];
+        else if(isset($GLOBALS['databaseConfig']))
+            $db .= $GLOBALS['databaseConfig']['database'];
         $db .= defined('SS_DATABASE_SUFFIX') ? SS_DATABASE_SUFFIX : '';
 
         // Generate a database dump
         $dump = new IMysqldump\Mysqldump($db, SS_DATABASE_USERNAME, SS_DATABASE_PASSWORD);
-        $dump->start(sys_get_temp_dir() . DIRECTORY_SEPARATOR . $GLOBALS['database'] . '-dump.sql');
+        $dump->start(sys_get_temp_dir() . DIRECTORY_SEPARATOR . $db . '-dump.sql');
 
         // Archive assets together with dump
         $arch = new FlxZipArchive();
-        $tmpName = sys_get_temp_dir() . DIRECTORY_SEPARATOR . $GLOBALS['database'] . '-backup.zip';
+        $tmpName = sys_get_temp_dir() . DIRECTORY_SEPARATOR . $db . '-' . date('YmdHis') . '-backup.zip';
 
-        // Check if file exists already and delete in case
-        if(is_file($tmpName))
-            unlink($tmpName);
-
+        // Create archive: add dump and assets
         $arch->open($tmpName, ZIPARCHIVE::CREATE);
-        $arch->addFile(sys_get_temp_dir() . DIRECTORY_SEPARATOR . $GLOBALS['database'] . '-dump.sql', $GLOBALS['database'] . '-dump.sql');
+        $arch->addFile(sys_get_temp_dir() . DIRECTORY_SEPARATOR . $db . '-dump.sql', $db . '-dump.sql');
         $arch->addDir(ASSETS_PATH, 'assets');
         $arch->close();
 
         // Return archive as download
         header("Content-type: application/zip");
-        header("Content-Disposition: attachment; filename=\"" . $GLOBALS['database'] . '-backup.zip' . "\"");
+        header("Content-Disposition: attachment; filename=\"" . $db . '-backup.zip' . "\"");
         header("Content-Length: " . filesize($tmpName));
         return readfile($tmpName);
     }
