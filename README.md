@@ -13,8 +13,8 @@ composer require level51/silverstripe-backuper
 * Generating (and soon also loading) a database dump. **Only MySQL at the moment!**
 * Archiving (and soon also loading) assets 
 
-# Dependencies
+## Dependencies
 * ifsnop MysqlDump: https://github.com/ifsnop/mysqldump-php
 
-# Setup
+## Setup
 Just install it and do the classical dev/build?flush=all.
