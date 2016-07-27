@@ -1,6 +1,6 @@
 {
   "name": "level51/silverstripe-backuper",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A slick backup/export tool for SilverStripe projects.",
   "type": "silverstripe-module",
   "authors": [

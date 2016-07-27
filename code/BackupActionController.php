@@ -7,6 +7,9 @@
 use Ifsnop\Mysqldump as IMysqldump;
 
 class BackupActionController extends Controller {
+
+    private static $host = 'localhost';
+
     private static $allowed_actions = array('createBackup');
 
     private static $url_handlers = array(
@@ -28,7 +31,7 @@ class BackupActionController extends Controller {
         $db .= defined('SS_DATABASE_SUFFIX') ? SS_DATABASE_SUFFIX : '';
 
         // Generate a database dump
-        $dump = new IMysqldump\Mysqldump($db, SS_DATABASE_USERNAME, SS_DATABASE_PASSWORD);
+        $dump = new IMysqldump\Mysqldump($db, SS_DATABASE_USERNAME, SS_DATABASE_PASSWORD, Config::inst()->get('BackupActionController', 'host'));
         $dump->start(sys_get_temp_dir() . DIRECTORY_SEPARATOR . $db . '-dump.sql');
 
         // Archive assets together with dump
