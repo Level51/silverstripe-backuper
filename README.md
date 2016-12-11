@@ -14,7 +14,7 @@ composer require level51/silverstripe-backuper
 * Archiving (and soon also loading) assets 
 
 ## Dependencies
-* ifsnop MysqlDump: https://github.com/ifsnop/mysqldump-php
+* sspak: https://github.com/silverstripe/sspak
 
 ## Setup
 Just install it and do the classical dev/build?flush=all.
