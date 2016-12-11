@@ -10,11 +10,11 @@
     }
   ],
   "repositories": [
-    {
-      "type": "vcs",
-      "url": "https://github.com/silverstripe/sspak.git"
-    }
-  ],
+        {
+            "type": "vcs",
+            "url": "https://github.com/silverstripe/sspak"
+        }
+   ],
   "require": {
     "ifsnop/mysqldump-php": "1.*",
     "silverstripe/sspak": "dev-master"
