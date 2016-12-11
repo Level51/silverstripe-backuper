@@ -6,6 +6,18 @@
  */
 use Ifsnop\Mysqldump as IMysqldump;
 
+// Define the root of the project
+define('PROJECT_DIR' , dirname(__DIR__) . '/../');
+
+// Define the root of sspak package
+define('PACKAGE_ROOT' , PROJECT_DIR . 'vendor/silverstripe/sspak/');
+
+// STDIN is a pipe, which reads from the child process
+const STDIN = array("pipe", "r");
+
+// STDERR is a pipe, which writes to the child process
+const STDERR = array("pipe", "w");
+
 class BackupActionController extends Controller {
 
     private static $host = 'localhost';
@@ -22,6 +34,7 @@ class BackupActionController extends Controller {
      * @param $form
      */
     public function createBackup(SS_HTTPRequest $request) {
+
         // Get DB name
         $db = defined('SS_DATABASE_PREFIX') ? SS_DATABASE_PREFIX : '';
         if(isset($GLOBALS['database']))
@@ -30,23 +43,22 @@ class BackupActionController extends Controller {
             $db .= $GLOBALS['databaseConfig']['database'];
         $db .= defined('SS_DATABASE_SUFFIX') ? SS_DATABASE_SUFFIX : '';
 
-        // Generate a database dump
-        $dump = new IMysqldump\Mysqldump($db, SS_DATABASE_USERNAME, SS_DATABASE_PASSWORD, Config::inst()->get('BackupActionController', 'host'));
-        $dump->start(sys_get_temp_dir() . DIRECTORY_SEPARATOR . $db . '-dump.sql');
 
-        // Archive assets together with dump
-        $arch = new FlxZipArchive();
+        // Create a SsPak instance
+        $ssPak = new SSPak(new Executor());
+
         $tmpName = sys_get_temp_dir() . DIRECTORY_SEPARATOR . $db . '-' . date('YmdHis') . '-backup.zip';
 
-        // Create archive: add dump and assets
-        $arch->open($tmpName, ZIPARCHIVE::CREATE);
-        $arch->addFile(sys_get_temp_dir() . DIRECTORY_SEPARATOR . $db . '-dump.sql', $db . '-dump.sql');
-        $arch->addDir(ASSETS_PATH, 'assets');
-        $arch->close();
+        $args = new Args(array('', 'save', PROJECT_DIR, $tmpName));
+        try {
+            $ssPak->save($args);
+        } catch (Exception $e) {
+            echo 'Backup failed: ',  $e->getMessage(), "\n";
+        }
 
         // Return archive as download
         header("Content-type: application/zip");
-        header("Content-Disposition: attachment; filename=\"" . $db . '-backup.zip' . "\"");
+        header("Content-Disposition: attachment; filename=\"" . $tmpName . "\"");
         header("Content-Length: " . filesize($tmpName));
         return readfile($tmpName);
     }
