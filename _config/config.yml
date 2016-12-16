@@ -3,7 +3,3 @@ Name: backuper
 After:
   - 'framework/*'
   - 'cms/*'
----
-SiteConfig:
-  extensions:
-    - BackupSettings

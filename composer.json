@@ -9,14 +9,9 @@
       "email": "js@lvl51.de"
     }
   ],
-  "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/silverstripe/sspak"
-        }
-   ],
   "require": {
     "ifsnop/mysqldump-php": "1.*",
-    "silverstripe/sspak": "dev-master"
+    "silverstripe/sspak": "dev-master",
+    "google/apiclient": "^2.0"
   }
 }
