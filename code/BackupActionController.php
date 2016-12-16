@@ -37,9 +37,9 @@ class BackupActionController extends Controller {
     );
 
     /**
-     * Gets a dump of the database and archives it together with the assets.
-     * @param $data
-     * @param $form
+     * Gets a dump of the database and archives it together with the assets by using the ssPak tool.
+     * @param SS_HTTPRequest $request
+     * @return string
      */
     public function createBackup(SS_HTTPRequest $request) {
 
@@ -100,6 +100,10 @@ class BackupActionController extends Controller {
         );
     }
 
+    /**
+     * @param SS_HTTPRequest $request
+     * @return int
+     */
     public function getBackup(SS_HTTPRequest $request) {
 
         if(!$request->param('Timestamp'))
@@ -118,6 +122,11 @@ class BackupActionController extends Controller {
         //return $fileURI;
     }
 
+    /**
+     * Restores a backup by using ssPak.
+     * @param SS_HTTPRequest $request
+     * @return string
+     */
     public function restoreBackup(SS_HTTPRequest $request) {
 
         // Check for missing commands
@@ -179,7 +188,9 @@ class BackupActionController extends Controller {
     }
 
     /**
-     * Returns a filename of a backup based on a timestamp
+     * Returns a valid filename of a backup based on a timestamp
+     * @param $timestamp
+     * @return string
      */
     private function getBackupFilename($timestamp){
         // Get DB name // TODO: Use different parameter for backup names?
@@ -195,12 +206,17 @@ class BackupActionController extends Controller {
 
     /**
      * Returns a URI path pointing to the backup file
+     * @param $filename
+     * @return string
      */
     private function getBackupFileURI($filename){
         return sys_get_temp_dir() . DIRECTORY_SEPARATOR . $filename;
     }
+
     /**
      * Returns a error message, which will be shown in the interface
+     * @param $msg
+     * @return string
      */
     private function errorMsg($msg){
         return json_encode(
@@ -211,9 +227,10 @@ class BackupActionController extends Controller {
         );
     }
 
-    /*
+    /**
      * Checks if the commands in the array given are missing in the system
-     * If true, returns a list of missing commands.
+     * @param $cmds
+     * @return array|int Returns a list of missing commands
      */
     private function areCommandsMissing($cmds) {
 
@@ -228,6 +245,11 @@ class BackupActionController extends Controller {
         return empty($missingCmds) ? 0 : $missingCmds;
     }
 
+    /**
+     * Checks if the given command is missing in the system
+     * @param $cmd
+     * @return bool
+     */
     private function isCommandExisting($cmd) {
         $returnVal = shell_exec(sprintf("which %s", escapeshellarg($cmd)));
         return !empty($returnVal);

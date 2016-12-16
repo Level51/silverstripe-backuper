@@ -10,7 +10,6 @@
     }
   ],
   "require": {
-    "ifsnop/mysqldump-php": "1.*",
     "silverstripe/sspak": "dev-master",
     "google/apiclient": "1.1.7"
   }
