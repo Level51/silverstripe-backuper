@@ -16,7 +16,8 @@ class BackupAdminSettings extends DataObject implements TemplateGlobalProvider
         'BackupDatabaseEnabled' => 'Boolean',
         'BackupAssetsEnabled' => 'Boolean',
         'BackupTransferEnabled' => 'Boolean',
-        'GDriveAuthConfig' => 'Varchar(5000)',
+        'GDriveClientId' => 'Varchar(255)',
+        'GDriveClientSecret' => 'Varchar(255)',
     );
 
     private static $has_one = array(
@@ -82,9 +83,10 @@ class BackupAdminSettings extends DataObject implements TemplateGlobalProvider
         $uploadField->setFolderName('tmp');
 
         $fields->addFieldsToTab(
-            'Root.Settings',
+            'Root.ApiKeys',
             array(
-                new TextareaField('GDriveAuthConfig', 'GDrive Auth Configuration'),
+                new TextField('GDriveClientId', 'GDrive Client ID'),
+                new TextField('GDriveClientSecret', 'GDrive Client Secret'),
             )
         );
 

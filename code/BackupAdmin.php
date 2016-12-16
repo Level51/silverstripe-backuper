@@ -5,7 +5,7 @@ class BackupAdmin extends LeftAndMain {
 	private static $menu_title = 'Backups';
 	private static $tree_class = 'BackupAdminSettings';
 	//private static $menu_icon = 'custom-admin/images/custom.png';
-	private static $priority = -2;
+	private static $priority = -1;
 
 	public function init() {
 		parent::init();
