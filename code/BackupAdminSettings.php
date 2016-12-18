@@ -24,50 +24,86 @@ class BackupAdminSettings extends DataObject implements TemplateGlobalProvider
         'RestoreFile' => 'File'
     );
 
+    /**
+     * Returns the CMS fields for managing the backup settings.
+     * @return FieldList
+     */
     public function getCMSFields()
     {
         // Create an empty FieldList for pushing fields tabs into
         $fields = new FieldList(new TabSet('Root'));
 
         $fields->addFieldsToTab(
-            'Root.Backup',
+            _t('BackupAdminSettings.BACKUP_TAB', 'Root.Backup'),
             array(
-                new HeaderField('backup-heading', 'Backup'),
-                new LiteralField('backup-explanation', '<p>This module backs up the database and assets, and optionally copies them to Google Drive.</p>'),
-                new CheckboxField('BackupDatabaseEnabled', 'Back up the database?'),
-                new CheckboxField('BackupAssetsEnabled', 'Back up the assets folder?'),
-                new CheckboxField('BackupTransferEnabled', 'Transfer to Google Drive? *'),
-                new LiteralField('backup-ssh', '<p>* Google drive transfer requires a Google OAuth2 client configuration.</p>'),
-                new HeaderField('backup-latest-heading', 'Latest backups', 4),
+                new HeaderField('backup-heading', _t('BackupAdminSettings.BACKUP_HEADING')),
+                new LiteralField('backup-explanation', '<p>' . _t('BackupAdminSettings.BACKUP_TEXT') . '</p>'),
+                new CheckboxField('BackupDatabaseEnabled', _t('BackupAdminSettings.BACKUP_DB')),
+                new CheckboxField('BackupAssetsEnabled', _t('BackupAdminSettings.BACKUP_ASSETS')),
+                new CheckboxField('BackupTransferEnabled', _t('BackupAdminSettings.BACKUP_TRANSFER')),
+                new LiteralField('backup-gdrive-creds', '<p>' . _t('BackupAdminSettings.BACKUP_GDRIVE_CREDS_TEXT') . '</p>'),
+                new HeaderField('backup-latest-heading', _t('BackupAdminSettings.BACKUP_LATEST'), 4),
                 //new LiteralField('backup-latest-links', $links),
                 new FormAction (
                 // doAction has to be a defined controller member
                     $action = "BackupNow",
-                    $title = "Backup now"
+                    $title = _t('BackupAdminSettings.BACKUP_NOW')
                 ),
             )
         );
 
+        $backupCtrler = new BackupActionController();
+
+        $client = $backupCtrler->getGoogleClient();
+
+        $gdrivelinks = '<div id="backup-latest-links">';
+        
+        if ($client && $backupCtrler->isGDriveAuthenticated($client)) {
+            $authMsg = _t('BackupAdminSettings.AUTHENTICATED') ;
+            $backups = $backupCtrler->getGDriveBackups($client);
+
+            if($backups) {
+                foreach ($backups as $backup) {
+                    $gdrivelinks .= sprintf(
+                        '<p><a href="javascript:void(0)" onclick="restoreGDriveBackup(\'%s\', \'%s\')">%s</a></p>' . "\n",
+                        $backup['Id'],
+                        $backup['Filename'],
+                        $backup['Filename']
+                    );
+                }
+            }
+        } else {
+            $authMsg = _t('BackupAdminSettings.NOT_AUTHENTICATED');
+        }
+        $gdrivelinks .= '</div>';
+
+        
         $fields->addFieldsToTab(
-            'Root.Restore',
+            _t('BackupAdminSettings.RESTORE_TAB', 'Root.Restore'),
             array(
-                new HeaderField('restore-heading', 'Restore by file upload'),
-                new LiteralField('restore-explanation', '<p>Restore the database and assets from an uploaded backup file.</p>'),
+                new HeaderField('restore-heading', _t('BackupAdminSettings.RESTORE_HEADING')),
+                new LiteralField('restore-explanation', '<p>' . _t('BackupAdminSettings.RESTORE_TEXT') . '</p>'),
                 $uploadField = new UploadField(
                     $name = 'RestoreFile',
-                    $title = 'Upload and restore backup file'
+                    $title = _t('BackupAdminSettings.RESTORE_UPLOAD_FIELD')
                 ),
                 new FormAction (
                 // doAction has to be a defined controller member
                     $action = "RestoreNow",
-                    $title = "Restore now"
+                    $title = _t('BackupAdminSettings.RESTORE_NOW_BTN')
                 ),
-                new HeaderField('gdrive-heading', 'Restore by Google Drive'),
-                new LiteralField('gdrive-explanation', '<p>This module restores the database and assets from an backup stored at Google Drive.</p>'),
-                new HeaderField('gdrive-latest-heading', 'Latest backups', 4),
-                //new LiteralField('gdrive-latest-links', $gdrivelinks),
+                new HeaderField('gdrive-heading', _t('BackupAdminSettings.RESTORE_GDRIVE_HEADING')),
+                new LiteralField('gdrive-explanation', '<p>' . _t('BackupAdminSettings.RESTORE_GDRIVE_TEXT') . '</p>'),
+                new HeaderField('gdrive-latest-heading', _t('BackupAdminSettings.RESTORE_GDRIVE_LIST_HEADING'), 4),
+                new LiteralField('gdrive-latest-links', $gdrivelinks)
             )
         );
+
+        if (!$client || !$backupCtrler->isGDriveAuthenticated($client)) {
+            $fields->addFieldToTab(
+                _t('BackupAdminSettings.RESTORE_TAB', 'Root.Restore'),
+                new LiteralField('auth-explanation', '<p>' . $authMsg . '</p>'));
+        }
 
         // Set allowed file extensions
         $uploadField->setAllowedExtensions(BACKUP_UPLOAD_FILE_EXTENSIONS); //TODO
@@ -83,12 +119,22 @@ class BackupAdminSettings extends DataObject implements TemplateGlobalProvider
         $uploadField->setFolderName('tmp');
 
         $fields->addFieldsToTab(
-            'Root.ApiKeys',
+            _t('BackupAdminSettings.APIKEYS_TAB', 'Root.ApiKeys'),
             array(
-                new TextField('GDriveClientId', 'GDrive Client ID'),
-                new TextField('GDriveClientSecret', 'GDrive Client Secret'),
+                new TextField('GDriveClientId', _t('BackupAdminSettings.API_GDRIVE_CLIENT_ID')),
+                new TextField('GDriveClientSecret', _t('BackupAdminSettings.API_GDRIVE_CLIENT_SECRET')),
+                $authNowBtn = new FormAction (
+                // doAction has to be a defined controller member
+                    $action = "AuthenticateNow",
+                    $title = _t('BackupAdminSettings.AUTHENTICATE_BTN')
+                ),
             )
         );
+
+
+        $fields->addFieldToTab(
+            _t('BackupAdminSettings.APIKEYS_TAB', 'Root.ApiKeys'),
+            new LiteralField('auth-explanation', '<p>' . $authMsg . '</p>'));
 
 
         return $fields;
