@@ -3,8 +3,9 @@
 // Max backup file size given in MB
 const BACKUP_MAX_UPLOAD_FILE_SIZE = 2048; // in MB
 
-const BACKUP_UPLOAD_FILE_EXTENSIONS = array('tar', 'tar.gz', 'zip', 'sspak');
+const BACKUP_UPLOAD_FILE_EXTENSIONS = array('tar', 'tar.gz', 'tgz', 'zip', 'sspak');
 
+const BACKUP_GET_URL = 'backuper/get-backup';
 
 class BackupAdminSettings extends DataObject implements TemplateGlobalProvider
 {
@@ -43,7 +44,7 @@ class BackupAdminSettings extends DataObject implements TemplateGlobalProvider
                 new CheckboxField('BackupTransferEnabled', _t('BackupAdminSettings.BACKUP_TRANSFER')),
                 new LiteralField('backup-gdrive-creds', '<p>' . _t('BackupAdminSettings.BACKUP_GDRIVE_CREDS_TEXT') . '</p>'),
                 new HeaderField('backup-latest-heading', _t('BackupAdminSettings.BACKUP_LATEST'), 4),
-                //new LiteralField('backup-latest-links', $links),
+                new LiteralField('backup-latest-links', self::getBackupsLinks()),
                 new FormAction (
                 // doAction has to be a defined controller member
                     $action = "BackupNow",
@@ -52,15 +53,15 @@ class BackupAdminSettings extends DataObject implements TemplateGlobalProvider
             )
         );
 
-        $backupCtrler = new BackupActionController();
+        $gDriveHandler = new GDriveHandler();
 
-        $client = $backupCtrler->getGoogleClient();
+        $client = $gDriveHandler->getGoogleClient();
 
         $gdrivelinks = '<div id="backup-latest-links">';
         
-        if ($client && $backupCtrler->isGDriveAuthenticated($client)) {
+        if ($client && $gDriveHandler->isGDriveAuthenticated()) {
             $authMsg = _t('BackupAdminSettings.AUTHENTICATED') ;
-            $backups = $backupCtrler->getGDriveBackups($client);
+            $backups = $gDriveHandler->getGDriveBackups($client);
 
             if($backups) {
                 foreach ($backups as $backup) {
@@ -99,7 +100,7 @@ class BackupAdminSettings extends DataObject implements TemplateGlobalProvider
             )
         );
 
-        if (!$client || !$backupCtrler->isGDriveAuthenticated($client)) {
+        if (!$client || !$gDriveHandler->isGDriveAuthenticated($client)) {
             $fields->addFieldToTab(
                 _t('BackupAdminSettings.RESTORE_TAB', 'Root.Restore'),
                 new LiteralField('auth-explanation', '<p>' . $authMsg . '</p>'));
@@ -138,6 +139,36 @@ class BackupAdminSettings extends DataObject implements TemplateGlobalProvider
 
 
         return $fields;
+    }
+
+    /**
+     *	Gets download links to the latest backups
+     *
+     *	@return String
+     */
+    private function getBackupsLinks(){
+        $links = '';
+
+        $dir = BackupTask::getBackupDir();
+        $files = scandir($dir);
+        foreach($files as $file) {
+
+            // Check for correct file extension
+            $extn = pathinfo($dir . DIRECTORY_SEPARATOR . $file, PATHINFO_EXTENSION);
+            if ( $extn != BackupTask::$BACKUP_FILE_TYPE ) {
+                continue;
+            }
+
+            $links .= sprintf(
+                '<p><a href="%s">%s</a></p>'."\n",
+                BackupTask::getBackupDownloadLink($file),
+                $file
+            );
+        }
+        if ( $links == '' ) {
+            $links = '<p>' . _t('BackupAdminSettings.NO_BACKUPS') . '</p>';
+        }
+        return $links;
     }
 
     /**

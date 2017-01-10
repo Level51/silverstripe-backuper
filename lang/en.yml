@@ -23,12 +23,13 @@ en:
     BACKUP_TAB: 'Root.Backup'
     RESTORE_TAB: 'Root.Restore'
     APIKEYS_TAB: 'Root.ApiKeys'
+    NO_BACKUPS: 'No backups so far!'
   BackupActionController:
     BACKUP_FAILED: 'Backup failed:'
     BACKUP_OPTION_MISSING: 'At least one backup option must be selected!'
     BACKUP_CMDS_MISSING: 'The required commands %s are missing!'
-    UPLOADED: 'Uploaded'
-    NOT_UPLOADED: 'Not uploaded'
+    UPLOADED: 'Uploaded!'
+    NOT_UPLOADED: 'Not uploaded!'
     BACKUP_NOT_UPLOADED_YET: 'Backup file has not been uploaded yet!'
     NO_GDRIVE_FILEID: 'No GDriveFileId given.'
     COULD_NOT_CREATE_GDRIVE: 'Could not create GDrive client! Are client secrets missing?'
@@ -36,13 +37,20 @@ en:
     BACKUP_DOES_NOT_EXIST: 'Backup file does not exist!'
     NOT_A_VALID_RESTORE_MODE: 'Not a valid restore mode.'
     RESTORE_FAILED: 'Restore failed:'
+    BACKUP_COMPLETE: 'Backup complete!'
     RESTORE_COMPLETE: 'Restore complete!'
     GDRIVE_STATUS: 'Google Drive Status:'
     LOGGED_OUT: 'Logged out!'
     TOKED_EXPIRED: 'Token is expired!'
     ALREADY_AUTHENTICATED: 'Already authenticated' 
     NOT_AUTHENTICATED: 'Not authenticated'  
-
+    GDRIVE_UPLOADING: 'Started uploading to Google Drive. This may take a while...'
+    STARTED_BACKUP_TASK: 'Successfully started backup task! Please wait...'
+    STARTED_RESTORE_TASK: 'Successfully started restore task! Please wait...'
+  RestoreTask:
+    DOWNLOADING_GDRIVE_DUMP: 'Downloading dump file from Google Drive...'
+    DOWNLOAD_GDRIVE_FINISHED: 'Download finished!'
+    RESTORING: 'Restoring...'
 
     
     

@@ -23,12 +23,13 @@ de:
     BACKUP_TAB: 'Root.Backup'
     RESTORE_TAB: 'Root.Wiederherstellen'
     APIKEYS_TAB: 'Root.ApiSchlüssel'
+    NO_BACKUPS: 'Noch keine Backups vorhanden!'
   BackupActionController:
     BACKUP_FAILED: 'Backup fehlgeschlagen:'
     BACKUP_OPTION_MISSING: 'Mindestens eine Backupoption muss ausgewählt werden!'
     BACKUP_CMDS_MISSING: 'Die Kommandos %s sind nicht installiert!'
-    UPLOADED: 'Hochgeladen'
-    NOT_UPLOADED: 'Nicht hochgeladen'
+    UPLOADED: 'Erfolgreich hochgeladen!'
+    NOT_UPLOADED: 'Nicht hochgeladen!'
     BACKUP_NOT_UPLOADED_YET: 'Backupdatei wurde noch nicht hochgeladen!'
     NO_GDRIVE_FILEID: 'Keine GDriveFileId angegegeben.'
     COULD_NOT_CREATE_GDRIVE: 'Konnte keinen GDrive Client erstellen! Sind die Client Zugangsdaten gespeichert?'
@@ -36,12 +37,17 @@ de:
     BACKUP_DOES_NOT_EXIST: 'Backupdatei existiert nicht!'
     NOT_A_VALID_RESTORE_MODE: 'Kein gültiger Wiederherstellungsmodus.'
     RESTORE_FAILED: 'Wiederherstellen fehlgeschlagen:'
+    BACKUP_COMPLETE: 'Backup erfolgreich erstellt!'
     RESTORE_COMPLETE: 'Wiederherstellen erfolgreich abgeschlossen!'
     GDRIVE_STATUS: 'Google Drive Status:'
     LOGGED_OUT: 'Ausgeloggt!'
     TOKED_EXPIRED: 'Token ist abgelaufen!'
     ALREADY_AUTHENTICATED: 'Bereits authentifiziert.' 
     NOT_AUTHENTICATED: 'Nicht authentifiziert.'  
-
-    
-    
+    GDRIVE_UPLOADING: 'Uploade Backup zu Google Drive. Dies kann eine Weile dauern...'
+    STARTED_BACKUP_TASK: 'Backup-Task wurde gestartet. Bitte warten...'
+    STARTED_RESTORE_TASK: 'Wiederherstellungs-Task wurde gestartet. Bitte warten...'
+  RestoreTask:
+    DOWNLOADING_GDRIVE_DUMP: 'Downloade Dump-Datei von Google Drive...'
+    DOWNLOAD_GDRIVE_FINISHED: 'Download abgeschlossen!'
+    RESTORING: 'Stelle wieder her...'
