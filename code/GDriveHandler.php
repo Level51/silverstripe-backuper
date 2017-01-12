@@ -19,7 +19,9 @@ class GDriveHandler {
 
     function __construct() {
         $this->client = self::createGoogleClient();
-        $this->service = new Google_Service_Drive($this->client);
+
+        if($this->client)
+            $this->service = new Google_Service_Drive($this->client);
     }
 
     /**
