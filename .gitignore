@@ -3,3 +3,4 @@
 .settings
 .idea
 .DS_Store
+_config/accesstoken.txt
