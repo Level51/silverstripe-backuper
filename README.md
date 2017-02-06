@@ -30,17 +30,17 @@ For nginx have a look at: https://easyengine.io/tutorials/php/increase-file-uplo
 
 ## Setup Google Drive Backups
 Setup Google Drive Backups by following these steps:
-1) Goto https://console.developers.google.com/start/api?id=drive 
-2) Click **Continue**, then **Go to credentials**.
-3) On the **Add credentials to your project page**, click the **Cancel** button.
-4) At the top of the page, select the **OAuth consent screen** tab. Select an **Email address**, enter a **Product name** if not already set, and click the **Save** button.
-5) Select the **Credentials** tab, click the **Create credentials** button and select **OAuth client ID**.
-6) Select the application type **Web-Application**, enter a name e.g. "Drive API Silverstripe" and set **Authorized JavaScript-Source** to your project root URL e.g. https://example.com. Further, enter the **Authorized Re-direct URL** e.g. https://example.com/backuper/authenticate-gdrive and finally click the **Create** button.
-7) A dialog will show the client credentials.
-8) Copy and paste the **client_id** and **client_secret** from the dialog to the **API Keys** tab of the Backup plugin's CMS settings page.
-9) Save and click authenticate.
-10) Allow access to your Google Drive at the shown authentication screen.
-11) Create backups by ticking the 'Upload to Google Drive' option.
+1. Goto https://console.developers.google.com/start/api?id=drive 
+2. Click **Continue**, then **Go to credentials**.
+3. On the **Add credentials to your project page**, click the **Cancel** button.
+4. At the top of the page, select the **OAuth consent screen** tab. Select an **Email address**, enter a **Product name** if not already set, and click the **Save** button.
+5. Select the **Credentials** tab, click the **Create credentials** button and select **OAuth client ID**.
+6. Select the application type **Web-Application**, enter a name e.g. "Drive API Silverstripe" and set **Authorized JavaScript-Source** to your project root URL e.g. https://example.com. Further, enter the **Authorized Re-direct URL** e.g. https://example.com/backuper/authenticate-gdrive and finally click the **Create** button.
+7. A dialog will show the client credentials.
+8. Copy and paste the **client_id** and **client_secret** from the dialog to the **API Keys** tab of the Backup plugin's CMS settings page.
+9. Save and click authenticate.
+10. Allow access to your Google Drive at the shown authentication screen.
+11. Create backups by ticking the 'Upload to Google Drive' option.
 
 ## Backup
 Create a backup by ticking the desired options in the Backup tab. Click **Save** and then **Create backup**. Make sure the you **save first** after you change backup options. 
