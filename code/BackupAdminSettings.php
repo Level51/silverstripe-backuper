@@ -63,7 +63,7 @@ class BackupAdminSettings extends DataObject implements TemplateGlobalProvider
             $authMsg = _t('BackupAdminSettings.AUTHENTICATED') ;
             $backups = $gDriveHandler->getGDriveBackups($client);
 
-            if($backups) {
+            if(!empty($backups)) {
                 foreach ($backups as $backup) {
                     // Check if valid filename
                     if (!BackupTask::isBackupFilenameValid($backup['Filename']) ) {
