@@ -255,25 +255,33 @@ class BackupActionController extends Controller
         // Get request url
         $url = $request['url'];
 
+        // If true, output will be sanitized
+        $sanitize = false;
+
         if (strpos($url, 'backup-status') !== false) {
             $statusFile = BackupTask::getBackupStatusFileURI();
         } else if (strpos($url, 'restore-status') !== false) {
             $statusFile = RestoreTask::getRestoreStatusFileURI();
         } else if (strpos($url, 'backup-output') !== false) {
             $statusFile = BackupTask::getBackupOutputFileURI();
+            $sanitize = true;
         } else if (strpos($url, 'restore-output') !== false) {
             $statusFile = RestoreTask::getRestoreOutputFileURI();
+            $sanitize = true;
         } else {
             return 'No mode set!';
         }
 
         if(file_exists($statusFile)) {
-            return file_get_contents($statusFile);
+            if($sanitize)
+                return htmlspecialchars(file_get_contents($statusFile));
+            else
+                return file_get_contents($statusFile);
         } else {
             return 'Nothing to show.';
         }
     }
-    
+
     /**
      * Returns a error message, which will be shown in the interface
      * @param $msg

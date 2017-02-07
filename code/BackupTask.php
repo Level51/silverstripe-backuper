@@ -25,7 +25,7 @@ class BackupTask extends BuildTask {
 
     // URL to backup download interface
     public static $BACKUP_GET_URL = 'backuper/get-backup';
-    
+
     /*
      * Required commands for SSPak according to
      * https://github.com/silverstripe/sspak#how-it-works
@@ -265,6 +265,39 @@ class BackupTask extends BuildTask {
                 'Message' => $msg
             )
         );
+    }
+
+    /**
+     * Returns a success message, which will be shown in the interface
+     * @param $msg
+     * @return string
+     */
+    public static function successMsg($msg)
+    {
+        return json_encode(
+            array(
+                'Success' => 1,
+                'Message' => $msg
+            )
+        );
+    }
+
+    /**
+     * Check if the given backup filename is valid
+     * @param $filename
+     * @return bool
+     */
+    public static function isBackupFilenameValid($filename){
+
+        // Check if filename starts with db name
+        $db = self::getDatabaseName();
+        $startsWithDb = strpos($filename, $db) === 0;
+
+        // Check if filename end with correct extension
+        $ext = '.' . self::$BACKUP_FILE_TYPE;
+        $endsWithExt = substr($filename, -strlen($ext)) === $ext;
+
+        return $startsWithDb && $endsWithExt;
     }
 
 }

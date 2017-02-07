@@ -43,13 +43,13 @@ class BackupAdminSettings extends DataObject implements TemplateGlobalProvider
                 new CheckboxField('BackupAssetsEnabled', _t('BackupAdminSettings.BACKUP_ASSETS')),
                 new CheckboxField('BackupTransferEnabled', _t('BackupAdminSettings.BACKUP_TRANSFER')),
                 new LiteralField('backup-gdrive-creds', '<p>' . _t('BackupAdminSettings.BACKUP_GDRIVE_CREDS_TEXT') . '</p>'),
-                new HeaderField('backup-latest-heading', _t('BackupAdminSettings.BACKUP_LATEST'), 4),
-                new LiteralField('backup-latest-links', self::getBackupsLinks()),
                 new FormAction (
                 // doAction has to be a defined controller member
                     $action = "BackupNow",
                     $title = _t('BackupAdminSettings.BACKUP_NOW')
                 ),
+                new HeaderField('backup-latest-heading', _t('BackupAdminSettings.BACKUP_LATEST'), 4),
+                new LiteralField('backup-latest-links', self::getBackupsLinks()),
             )
         );
 
@@ -58,13 +58,18 @@ class BackupAdminSettings extends DataObject implements TemplateGlobalProvider
         $client = $gDriveHandler->getGoogleClient();
 
         $gdrivelinks = '<div id="backup-latest-links">';
-        
+
         if ($client && $gDriveHandler->isGDriveAuthenticated()) {
             $authMsg = _t('BackupAdminSettings.AUTHENTICATED') ;
             $backups = $gDriveHandler->getGDriveBackups($client);
 
             if($backups) {
                 foreach ($backups as $backup) {
+                    // Check if valid filename
+                    if (!BackupTask::isBackupFilenameValid($backup['Filename']) ) {
+                        continue;
+                    }
+
                     $gdrivelinks .= sprintf(
                         '<p><a href="javascript:void(0)" onclick="restoreGDriveBackup(\'%s\', \'%s\')">%s</a></p>' . "\n",
                         $backup['Id'],
@@ -78,7 +83,7 @@ class BackupAdminSettings extends DataObject implements TemplateGlobalProvider
         }
         $gdrivelinks .= '</div>';
 
-        
+
         $fields->addFieldsToTab(
             _t('BackupAdminSettings.RESTORE_TAB', 'Root.Restore'),
             array(
@@ -153,9 +158,8 @@ class BackupAdminSettings extends DataObject implements TemplateGlobalProvider
         $files = scandir($dir);
         foreach($files as $file) {
 
-            // Check for correct file extension
-            $extn = pathinfo($dir . DIRECTORY_SEPARATOR . $file, PATHINFO_EXTENSION);
-            if ( $extn != BackupTask::$BACKUP_FILE_TYPE ) {
+            // Check if valid filename
+            if (!BackupTask::isBackupFilenameValid($file) ) {
                 continue;
             }
 

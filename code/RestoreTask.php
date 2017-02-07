@@ -155,18 +155,16 @@ class RestoreTask extends BuildTask
             // Starting backup
             $ssPak->load($args);
         } catch (Exception $e) {
-            return BackupTask::errorMsg(_t('BackupActionController.RESTORE_FAILED') . ' ' . $e->getMessage());
+            $error = BackupTask::errorMsg(_t('BackupActionController.RESTORE_FAILED') . ' ' . $e->getMessage());
         }
 
         // Delete uploaded backup file after a successful restore
         unlink($restoreFilePath);
 
-        return json_encode(
-            array(
-                'Success' => 1,
-                'Message' => _t('BackupActionController.RESTORE_COMPLETE')
-            )
-        );
+        if(!isset($error))
+            return BackupTask::successMsg(_t('BackupActionController.RESTORE_COMPLETE'));
+        else
+            return $error;
     }
 
     /**
