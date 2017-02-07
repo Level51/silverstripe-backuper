@@ -18,6 +18,7 @@ en:
     API_GDRIVE_CLIENT_ID: 'GDrive Client ID'
     API_GDRIVE_CLIENT_SECRET : 'GDrive Client Secret'
     AUTHENTICATE_BTN: 'Authenticate now'
+    LOGOUT_BTN: 'Logout'
     AUTHENTICATED: 'GDrive authenticated!'
     NOT_AUTHENTICATED: 'GDrive not authenticated!'
     BACKUP_TAB: 'Root.Backup'

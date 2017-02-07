@@ -129,13 +129,30 @@ class BackupAdminSettings extends DataObject implements TemplateGlobalProvider
             array(
                 new TextField('GDriveClientId', _t('BackupAdminSettings.API_GDRIVE_CLIENT_ID')),
                 new TextField('GDriveClientSecret', _t('BackupAdminSettings.API_GDRIVE_CLIENT_SECRET')),
-                $authNowBtn = new FormAction (
-                // doAction has to be a defined controller member
-                    $action = "AuthenticateNow",
-                    $title = _t('BackupAdminSettings.AUTHENTICATE_BTN')
-                ),
             )
         );
+
+        if (!($client && $gDriveHandler->isGDriveAuthenticated())) {
+            $fields->addFieldsToTab(
+                _t('BackupAdminSettings.APIKEYS_TAB', 'Root.ApiKeys'),
+                array(
+                    $authNowBtn = new FormAction (
+                        $action = "AuthenticateNow",
+                        $title = _t('BackupAdminSettings.AUTHENTICATE_BTN')
+                    ),
+                )
+            );
+        } else {
+            $fields->addFieldsToTab(
+                _t('BackupAdminSettings.APIKEYS_TAB', 'Root.ApiKeys'),
+                array(
+                    $authNowBtn = new FormAction (
+                        $action = "LogoutNow",
+                        $title = _t('BackupAdminSettings.LOGOUT_BTN')
+                    ),
+                )
+            );
+        }
 
 
         $fields->addFieldToTab(

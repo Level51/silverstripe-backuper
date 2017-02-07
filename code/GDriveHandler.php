@@ -70,7 +70,7 @@ class GDriveHandler {
                     self::saveAccessToken($newToken);
             }
         } else {
-            echo 'Token is not stored!';
+            //echo 'Token is not stored!';
         }
 
         return $client;

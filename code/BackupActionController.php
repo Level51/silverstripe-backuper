@@ -204,6 +204,10 @@ class BackupActionController extends Controller
             // Remove token file
             unlink(GDriveHandler::getAccessTokenFileURI());
 
+            // Redirect to admin
+            $admin_redirect_uri = Director::absoluteBaseURL() . 'admin/' . BackupAdmin::getUrlSegment();
+            header('Location: ' . filter_var($admin_redirect_uri, FILTER_SANITIZE_URL));
+
             return _t('BackupActionController.LOGGED_OUT');
         }
 

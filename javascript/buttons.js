@@ -5,6 +5,7 @@ var statusRefreshRate = 2000;
 
 (function ($) {
     $(document).ready(function () {
+        // Backup button
         $(document).on('click', '#Form_EditForm_action_BackupNow', function () {
 
             backupMsg(ss.i18n._t('BUTTONS.BACKINGUP'), 'notice');
@@ -32,6 +33,7 @@ var statusRefreshRate = 2000;
             });
         });
 
+        // Restore button
         $(document).on('click', '#Form_EditForm_action_RestoreNow', function () {
 
             restoreMsg(ss.i18n._t('BUTTONS.RESTORING'));
@@ -54,8 +56,14 @@ var statusRefreshRate = 2000;
             });
         });
 
+        // Authenticate button
         $(document).on('click', '#Form_EditForm_action_AuthenticateNow', function () {
             window.location.href = 'backuper/authenticate-gdrive';
+        });
+
+        // Logout button
+        $(document).on('click', '#Form_EditForm_action_LogoutNow', function () {
+            window.location.href = 'backuper/authenticate-gdrive?logout';
         });
     });
 
