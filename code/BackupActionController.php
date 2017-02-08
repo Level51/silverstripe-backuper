@@ -101,6 +101,7 @@ class BackupActionController extends Controller
         $fileURI = BackupTask::getBackupFileURI($filename);
 
         // Return archive as download
+
         header("Content-type: " . BackupTask::$BACKUP_MIME);
         header("Content-Disposition: attachment; filename=\"" . $filename . "\"");
         header("Content-Length: " . filesize($fileURI));
