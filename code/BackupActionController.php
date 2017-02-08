@@ -104,7 +104,22 @@ class BackupActionController extends Controller
         header("Content-type: " . BackupTask::$BACKUP_MIME);
         header("Content-Disposition: attachment; filename=\"" . $filename . "\"");
         header("Content-Length: " . filesize($fileURI));
-        return readfile($fileURI);
+
+        // Sending large backup files in 1MB chunks
+        $chunksize = 1 * (1024 * 1024); // how many bytes per chunk
+        if (filesize($fileURI) > $chunksize) {
+            $handle = fopen($fileURI, 'rb'); // read binary mode
+            $buffer = '';
+            while (!feof($handle)) {
+                $buffer = fread($handle, $chunksize);
+                echo $buffer;
+                ob_flush();
+                flush();
+            }
+            fclose($handle);
+        } else {
+            return readfile($fileURI);
+        }
     }
 
     /**
